@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copas do Mundo FIFA</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      color: #1e293b;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(250, 204, 21, 0.28), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(34, 197, 94, 0.28), transparent 30%),
+        radial-gradient(circle at 50% 95%, rgba(14, 116, 144, 0.30), transparent 35%),
+        linear-gradient(135deg, #052e46 0%, #064e3b 45%, #083344 100%);
+      background-attachment: fixed;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image:
+        linear-gradient(45deg, transparent 46%, white 47%, white 49%, transparent 50%),
+        linear-gradient(-45deg, transparent 46%, white 47%, white 49%, transparent 50%);
+      background-size: 70px 70px;
+      z-index: -2;
+    }
+
+    body::after {
+      content: '⚽ 🏆 ⚽ 🏆 ⚽';
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 25px;
+      text-align: center;
+      font-size: 90px;
+      opacity: 0.06;
+      letter-spacing: 35px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    header {
+      color: white;
+      text-align: center;
+      padding: 55px 20px 65px;
+      background:
+        linear-gradient(rgba(3, 31, 55, 0.78), rgba(3, 75, 67, 0.82)),
+        url('fundo-copa.jpg');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 5px solid rgba(250, 204, 21, 0.9);
+    }
+
+    header::before {
+      content: '🏆';
+      position: absolute;
+      left: 8%;
+      top: 18px;
+      font-size: 88px;
+      opacity: 0.18;
+      transform: rotate(-12deg);
+    }
+
+    header::after {
+      content: '⚽';
+      position: absolute;
+      right: 9%;
+      bottom: 12px;
+      font-size: 95px;
+      opacity: 0.18;
+      transform: rotate(15deg);
+    }
+
+    header h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.35);
+    }
+
+    header p {
+      font-size: 17px;
+      color: #dbeafe;
+    }
+
+    .layout-principal {
+      width: 92%;
+      max-width: 1650px;
+      margin: 35px auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1200px) 320px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .container {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.18);
+    }
+
+    .ranking-campeoes {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.18);
+      position: sticky;
+      top: 20px;
+    }
+
+    .ranking-campeoes h2 {
+      color: white;
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 6px;
+      text-shadow: 0 3px 12px rgba(0,0,0,0.30);
+    }
+
+    .ranking-campeoes .subtitulo-ranking {
+      color: #dbeafe;
+      text-align: center;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .lista-ranking {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .item-ranking {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.15);
+    }
+
+    .posicao-ranking {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #facc15, #f59e0b);
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .pais-ranking {
+      font-weight: 800;
+      color: #0f172a;
+      font-size: 15px;
+      line-height: 1.1;
+    }
+
+    .tacas-ranking {
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .numero-ranking {
+      min-width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: #063970;
+      color: white;
+      font-weight: 900;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .item-ranking {
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .item-ranking:hover {
+      transform: translateX(-4px) scale(1.02);
+      background: #ffffff;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.22);
+    }
+
+    .ranking-dica {
+      margin-top: 16px;
+      color: #dbeafe;
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.4;
+      opacity: 0.92;
+    }
+
+    .resumo-selecao {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .resumo-card {
+      background: linear-gradient(135deg, #0f766e, #063970);
+      color: white;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.16);
+    }
+
+    .resumo-card strong {
+      display: block;
+      font-size: 34px;
+      margin-bottom: 4px;
+    }
+
+    .resumo-card span {
+      font-size: 13px;
+      color: #dbeafe;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .anos-titulos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .ano-titulo-pill {
+      background: #facc15;
+      color: #1e293b;
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-weight: 900;
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.12);
+    }
+
+    .detalhes-titulos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .detalhe-titulo {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .detalhe-titulo h3 {
+      color: #063970;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .detalhe-titulo p {
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+
+    .detalhe-titulo p strong {
+      color: #0f766e;
+    }
+
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
+    }
+
+    .capa {
+      height: 285px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(250,204,21,0.45), transparent 32%),
+        radial-gradient(circle at 80% 85%, rgba(34,197,94,0.40), transparent 35%),
+        linear-gradient(135deg, #0f766e, #063970);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .capa::before {
+      content: 'FIFA WORLD CUP';
+      position: absolute;
+      top: 18px;
+      left: 0;
+      right: 0;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .capa::after {
+      content: '⚽';
+      position: absolute;
+      right: -18px;
+      bottom: -22px;
+      font-size: 105px;
+      opacity: 0.12;
+    }
+
+    .icone-copa {
+      width: 130px;
+      height: 130px;
+      object-fit: contain;
+      margin-bottom: 18px;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.25));
+    }
+
+    .ano-copa {
+      font-size: 44px;
+      font-weight: bold;
+    }
+
+    .info {
+      padding: 18px;
+      text-align: center;
+    }
+
+    .info h2 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .info span {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+
+    .campeao-info {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .campeao-info strong {
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .campeao-info .bandeira-img {
+      width: 18px;
+      height: 13px;
+      object-fit: cover;
+      border-radius: 2px;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.12);
+      margin-left: 2px;
+      flex-shrink: 0;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.50);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 9999;
+    }
+
+    .modal-overlay.ativo {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 92vw;
+      max-width: 1280px;
+      aspect-ratio: 16 / 9;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.30);
+      position: relative;
+      animation: abrir 0.25s ease;
+    }
+
+    .modal-box::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .modal-box::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 999px;
+    }
+
+    .modal-box::-webkit-scrollbar-thumb {
+      background: #0f766e;
+      border-radius: 999px;
+    }
+
+    @keyframes abrir {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .fechar {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #1e293b;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .topo-modal {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .topo-modal img {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+    }
+
+    .topo-modal h2 {
+      font-size: 32px;
+      color: #063970;
+      margin-bottom: 6px;
+    }
+
+    .topo-modal p {
+      color: #64748b;
+    }
+
+    .dados {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+
+    .dado {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 17px;
+    }
+
+    .dado strong {
+      display: block;
+      color: #0f766e;
+      font-size: 14px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .dado span {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .acoes {
+      margin-top: 25px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-drive {
+      display: inline-block;
+      background: #0f766e;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-size: 15px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .btn-drive:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.20);
+    }
+
+    .btn-escalacao {
+      background: #063970;
+    }
+
+    .msg-sem-album {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .detalhe-acoes {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-mini-escalacao {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f766e, #063970);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .btn-mini-escalacao:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+    }
+
+    .botao-voltar {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      border: none;
+      background: #063970;
+      color: white;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+    }
+
+    .lineup-intro {
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .campo-escalacao {
+      position: relative;
+      margin-top: 20px;
+      margin-bottom: 24px;
+      min-height: 430px;
+      padding: 34px 18px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, #11803a 0%, #0d6a32 45%, #0c592c 100%);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.18), 0 18px 34px rgba(15, 23, 42, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .campo-escalacao::before {
+      content: '';
+      position: absolute;
+      inset: 18px;
+      border: 3px solid rgba(255,255,255,0.82);
+      border-radius: 16px;
+      pointer-events: none;
+    }
+
+    .campo-escalacao::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 18px;
+      right: 18px;
+      height: 3px;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.68);
+      pointer-events: none;
+    }
+
+    .circulo-central {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.70);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .grande-area {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 88px;
+      border: 3px solid rgba(255,255,255,0.75);
+      pointer-events: none;
+    }
+
+    .grande-area.topo {
+      top: 18px;
+      border-bottom: none;
+      border-radius: 14px 14px 0 0;
+    }
+
+    .grande-area.baixo {
+      bottom: 18px;
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+    }
+
+    .linhas-escalacao {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      height: 100%;
+    }
+
+    .linha-escalacao {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      gap: 12px;
+      flex-wrap: nowrap;
+    }
+
+    .jogador-card {
+      min-width: 90px;
+      max-width: 140px;
+      width: 100%;
+      flex: 1 1 0;
+      background: linear-gradient(180deg, #fde047 0%, #facc15 55%, #eab308 100%);
+      border-radius: 16px;
+      padding: 10px 8px;
+      text-align: center;
+      box-shadow: 0 14px 22px rgba(15, 23, 42, 0.24);
+      border: 2px solid rgba(255,255,255,0.70);
+    }
+
+    .jogador-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      background: rgba(255,255,255,0.25);
+      color: #063970;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.65);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .jogador-foto {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .jogador-avatar.tem-foto .jogador-foto {
+      display: block;
+    }
+
+    .jogador-iniciais {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 16px;
+      color: #063970;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.85), rgba(226,232,240,0.88));
+    }
+
+    .jogador-avatar.tem-foto .jogador-iniciais {
+      display: none;
+    }
+
+    .jogador-nome {
+      font-size: 12px;
+      line-height: 1.15;
+      font-weight: 900;
+      color: #1e293b;
+      text-transform: uppercase;
+      word-break: break-word;
+    }
+
+    .lista-jogadores {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .modal-box.modal-escalacao {
+      width: min(90vw, 900px);
+      max-width: 900px;
+      aspect-ratio: auto;
+      max-height: min(88vh, 760px);
+      padding: 24px;
+      border-radius: 22px;
+    }
+
+    .modal-box.modal-escalacao .topo-modal {
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+    }
+
+    .modal-box.modal-escalacao .resumo-selecao {
+      margin-bottom: 16px;
+    }
+
+    .modal-box.modal-escalacao .resumo-card {
+      padding: 15px;
+    }
+
+    .modal-box.modal-escalacao .resumo-card strong {
+      font-size: 24px;
+    }
+
+    .modal-box.modal-escalacao .campo-escalacao {
+      min-height: 360px;
+      margin-top: 14px;
+      margin-bottom: 18px;
+      padding: 28px 16px;
+    }
+
+    .modal-box.modal-escalacao .jogador-card {
+      min-width: 76px;
+      max-width: 110px;
+      padding: 8px 6px;
+    }
+
+    .modal-box.modal-escalacao .jogador-avatar {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 6px;
+    }
+
+    .modal-box.modal-escalacao .jogador-nome {
+      font-size: 11px;
+    }
+
+    .lista-jogadores h3 {
+      color: #063970;
+      margin-bottom: 10px;
+    }
+
+    .lista-jogadores p {
+      color: #334155;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: rgba(255,255,255,0.78);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1250px) {
+      .layout-principal {
+        grid-template-columns: 1fr;
+      }
+
+      .ranking-campeoes {
+        position: static;
+        order: -1;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .topo-modal {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .layout-principal {
+        width: 94%;
+      }
+
+      .item-ranking {
+        grid-template-columns: 36px 1fr auto;
+      }
+
+      .posicao-ranking {
+        width: 36px;
+        height: 36px;
+      }
+
+      .campo-escalacao {
+        min-height: 520px;
+        padding: 30px 10px;
+      }
+
+      .grande-area {
+        width: 210px;
+      }
+
+      .linha-escalacao {
+        gap: 8px;
+      }
+
+      .jogador-card {
+        min-width: 62px;
+        padding: 8px 4px;
+      }
+
+      .jogador-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 13px;
+      }
+
+      .jogador-iniciais {
+        font-size: 13px;
+      }
+
+      .jogador-nome {
+        font-size: 10px;
+      }
+
+      .botao-voltar {
+        position: static;
+        margin-bottom: 18px;
+      }
+    }
+
+
+    @media (max-width: 650px) {
+      .modal-box {
+        width: 94vw;
+        aspect-ratio: auto;
+        max-height: calc(100vh - 24px);
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>COPAS DO MUNDO FIFA</h1>
+<br> 
+	<p>Developed by Gustavo Kloh</p>
+</header>
+
+  <div class="layout-principal">
+    <main class="container">
+      <section class="grid" id="galeria"></section>
+    </main>
+
+    <aside class="ranking-campeoes">
+      <h2>MAIORES CAMPEÕES</h2>
+      <p class="subtitulo-ranking">Copas ganhas por seleção</p>
+      <div class="lista-ranking" id="rankingCampeoes"></div>
+      <p class="ranking-dica">Clique em uma seleção para ver os anos dos títulos e os detalhes de cada Copa.</p>
+    </aside>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox"></div>
+  </div>
+
+  <footer>
+    Página para organização das Copas do Mundo FIFA
+  </footer>
+
+  <script>
+    const copas = [
+      { ano: 1930, pais: 'Uruguai', campeao: 'Uruguai', vice: 'Argentina', final: 'Uruguai 4 x 2 Argentina', artilheiro: 'Guillermo Stábile', icone: 'icons/1930.jpg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1930' },
+      { ano: 1934, pais: 'Itália', campeao: 'Itália', vice: 'Tchecoslováquia', final: 'Itália 2 x 1 Tchecoslováquia', artilheiro: 'Oldřich Nejedlý', icone: 'icons/1934.jpg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1934' },
+      { ano: 1938, pais: 'França', campeao: 'Itália', vice: 'Hungria', final: 'Itália 4 x 2 Hungria', artilheiro: 'Leônidas', icone: 'icons/1938.jpg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1938' },
+      { ano: 1950, pais: 'Brasil', campeao: 'Uruguai', vice: 'Brasil', final: 'Uruguai 2 x 1 Brasil', artilheiro: 'Ademir de Menezes', icone: 'icons/1950.jpg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1950' },
+      { ano: 1954, pais: 'Suíça', campeao: 'Alemanha Ocidental', vice: 'Hungria', final: 'Alemanha Ocidental 3 x 2 Hungria', artilheiro: 'Sándor Kocsis', icone: 'icons/1954.jpeg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1954' },
+      { ano: 1958, pais: 'Suécia', campeao: 'Brasil', vice: 'Suécia', final: 'Brasil 5 x 2 Suécia', artilheiro: 'Just Fontaine', icone: 'icons/1958.jpeg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1958' },
+      { ano: 1962, pais: 'Chile', campeao: 'Brasil', vice: 'Tchecoslováquia', final: 'Brasil 3 x 1 Tchecoslováquia', artilheiro: 'Garrincha, Vavá, Leonel Sánchez, Flórián Albert, Valentin Ivanov e Dražan Jerković', icone: 'icons/1962.jpg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1962' },
+      { ano: 1966, pais: 'Inglaterra', campeao: 'Inglaterra', vice: 'Alemanha Ocidental', final: 'Inglaterra 4 x 2 Alemanha Ocidental', artilheiro: 'Eusébio', icone: 'icons/1966.jpg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1966' },
+      { ano: 1970, pais: 'México', campeao: 'Brasil', vice: 'Itália', final: 'Brasil 4 x 1 Itália', artilheiro: 'Gerd Müller', icone: 'icons/1970.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1970' },
+      { ano: 1974, pais: 'Alemanha Ocidental', campeao: 'Alemanha Ocidental', vice: 'Holanda', final: 'Alemanha Ocidental 2 x 1 Holanda', artilheiro: 'Grzegorz Lato', icone: 'icons/1974.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1974' },
+      { ano: 1978, pais: 'Argentina', campeao: 'Argentina', vice: 'Holanda', final: 'Argentina 3 x 1 Holanda', artilheiro: 'Mario Kempes', icone: 'icons/1978.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1978' },
+      { ano: 1982, pais: 'Espanha', campeao: 'Itália', vice: 'Alemanha Ocidental', final: 'Itália 3 x 1 Alemanha Ocidental', artilheiro: 'Paolo Rossi', icone: 'icons/1982.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1982' },
+      { ano: 1986, pais: 'México', campeao: 'Argentina', vice: 'Alemanha Ocidental', final: 'Argentina 3 x 2 Alemanha Ocidental', artilheiro: 'Gary Lineker', icone: 'icons/1986.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1986' },
+      { ano: 1990, pais: 'Itália', campeao: 'Alemanha Ocidental', vice: 'Argentina', final: 'Alemanha Ocidental 1 x 0 Argentina', artilheiro: 'Salvatore Schillaci', icone: 'icons/1990.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1990' },
+      { ano: 1994, pais: 'Estados Unidos', campeao: 'Brasil', vice: 'Itália', final: 'Brasil 0 x 0 Itália - 3 x 2 nos pênaltis', artilheiro: 'Hristo Stoichkov e Oleg Salenko', icone: 'icons/1994.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1994' },
+      { ano: 1998, pais: 'França', campeao: 'França', vice: 'Brasil', final: 'França 3 x 0 Brasil', artilheiro: 'Davor Šuker', icone: 'icons/1998.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_1998' },
+      { ano: 2002, pais: 'Coreia do Sul e Japão', campeao: 'Brasil', vice: 'Alemanha', final: 'Brasil 2 x 0 Alemanha', artilheiro: 'Ronaldo', icone: 'icons/2002.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_2002' },
+      { ano: 2006, pais: 'Alemanha', campeao: 'Itália', vice: 'França', final: 'Itália 1 x 1 França - 5 x 3 nos pênaltis', artilheiro: 'Miroslav Klose', icone: 'icons/2006.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_2006' },
+      { ano: 2010, pais: 'África do Sul', campeao: 'Espanha', vice: 'Holanda', final: 'Espanha 1 x 0 Holanda', artilheiro: 'Thomas Müller, David Villa, Wesley Sneijder e Diego Forlán', icone: 'icons/2010.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_2010' },
+      { ano: 2014, pais: 'Brasil', campeao: 'Alemanha', vice: 'Argentina', final: 'Alemanha 1 x 0 Argentina', artilheiro: 'James Rodríguez', icone: 'icons/2014.png', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_2014' },
+      { ano: 2018, pais: 'Rússia', campeao: 'França', vice: 'Croácia', final: 'França 4 x 2 Croácia', artilheiro: 'Harry Kane', icone: 'icons/2018.jpg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_2018' },
+      { ano: 2022, pais: 'Catar', campeao: 'Argentina', vice: 'França', final: 'Argentina 3 x 3 França - 4 x 2 nos pênaltis', artilheiro: 'Kylian Mbappé', icone: 'icons/2022.jpg', drive: 'COLE_AQUI_O_LINK_DO_DRIVE_2022' },
+{
+  ano: 2026,
+  pais: 'Estados Unidos, Canadá e México',
+  campeao: 'A definir',
+  vice: 'A definir',
+  final: 'Final ainda não realizada',
+  artilheiro: 'A definir',
+  icone: 'icons/2026.png',
+  drive: 'https://drive.google.com/drive/folders/1i8O9RmI0nE7fK4CNfVLDDEdejBoYH1zN'
+}
+    ];
+
+    const galeria = document.getElementById('galeria');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalBox = document.getElementById('modalBox');
+    const rankingCampeoes = document.getElementById('rankingCampeoes');
+    let contextoRetorno = null;
+    const cacheFotosJogadores = {};
+    const nomesBuscaFoto = {
+      '1930|Fernández': 'Lorenzo Fernández footballer',
+      '1934|Ferraris IV': 'Attilio Ferraris footballer',
+      '1938|Ferraris II': 'Pietro Ferraris footballer',
+      '1950|Pérez': 'Juan Alberto Schiaffino',
+      '1954|Mai': 'Karl Mai footballer',
+      '1958|Didi': 'Didi footballer',
+      '1962|Didi': 'Didi footballer',
+      '1966|B. Charlton': 'Bobby Charlton',
+      '1966|J. Charlton': 'Jack Charlton',
+      '1966|B. Moore': 'Bobby Moore',
+      '1966|Ball': 'Alan Ball Jr.',
+      '1966|Peters': 'Martin Peters',
+      '1966|Stiles': 'Nobby Stiles',
+      '1966|Wilson': 'Ray Wilson footballer',
+      '1966|Hunt': 'Roger Hunt footballer',
+      '1966|Banks': 'Gordon Banks',
+      '1974|Müller': 'Gerd Müller',
+      '1982|Rossi': 'Paolo Rossi',
+      '1994|Branco': 'Branco footballer',
+      '1998|Petit': 'Emmanuel Petit',
+      '2002|Ronaldo': 'Ronaldo Nazário',
+      '2002|Ronaldinho': 'Ronaldinho',
+      '2006|Toni': 'Luca Toni',
+      '2014|Müller': 'Thomas Müller',
+      '2018|Hernandez': 'Lucas Hernandez',
+      '2018|Pavard': 'Benjamin Pavard',
+      '2022|E. Martínez': 'Emiliano Martínez'
+    };
+
+    const escalacoesPorAno = {
+      1930: {
+        tecnico: 'Alberto Suppici',
+        observacao: 'Escalação campeã da final',
+        formacao: '2-3-5',
+        linhas: [
+          ['Iriarte', 'Cea', 'Castro', 'Scarone', 'Dorado'],
+          ['Gestido', 'Fernández', 'Andrade'],
+          ['Mascheroni', 'Nasazzi'],
+          ['Ballestrero']
+        ]
+      },
+      1934: {
+        tecnico: 'Vittorio Pozzo',
+        observacao: 'Escalação campeã da final',
+        formacao: '2-3-5',
+        linhas: [
+          ['Orsi', 'Ferrari', 'Schiavio', 'Meazza', 'Guaita'],
+          ['Ferraris IV', 'Monti', 'Bertolini'],
+          ['Allemandi', 'Monzeglio'],
+          ['Combi']
+        ]
+      },
+      1938: {
+        tecnico: 'Vittorio Pozzo',
+        observacao: 'Escalação campeã da final',
+        formacao: '2-3-5',
+        linhas: [
+          ['Ferraris II', 'Colaussi', 'Piola', 'Meazza', 'Biavati'],
+          ['Locatelli', 'Andreolo', 'Serantoni'],
+          ['Rava', 'Foni'],
+          ['Olivieri']
+        ]
+      },
+      1950: {
+        tecnico: 'Juan López Fontana',
+        observacao: 'Escalação campeã da partida decisiva',
+        formacao: '2-3-5',
+        linhas: [
+          ['Moran', 'Schiaffino', 'Míguez', 'Pérez', 'Ghiggia'],
+          ['Varela', 'Andrade', 'Gambetta'],
+          ['Tejera', 'Matías González'],
+          ['Máspoli']
+        ]
+      },
+      1954: {
+        tecnico: 'Sepp Herberger',
+        observacao: 'Escalação campeã da final',
+        formacao: '3-2-5',
+        linhas: [
+          ['Ottmar Walter', 'Fritz Walter', 'Schäfer', 'Morlock', 'Rahn'],
+          ['Mai', 'Liebrich'],
+          ['Eckel', 'Kohlmeyer', 'Posipal'],
+          ['Turek']
+        ]
+      },
+      1958: {
+        tecnico: 'Vicente Feola',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-2-4',
+        linhas: [
+          ['Zagallo', 'Pelé', 'Vavá', 'Garrincha'],
+          ['Didi', 'Zito'],
+          ['Nilton Santos', 'Orlando', 'Bellini', 'Djalma Santos'],
+          ['Gilmar']
+        ]
+      },
+      1962: {
+        tecnico: 'Aymoré Moreira',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-2-4',
+        linhas: [
+          ['Zagallo', 'Amarildo', 'Vavá', 'Garrincha'],
+          ['Didi', 'Zito'],
+          ['Nilton Santos', 'Zózimo', 'Mauro', 'Djalma Santos'],
+          ['Gilmar']
+        ]
+      },
+      1966: {
+        tecnico: 'Alf Ramsey',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['B. Charlton', 'Hunt', 'Hurst'],
+          ['Ball', 'Peters', 'Stiles'],
+          ['Wilson', 'J. Charlton', 'B. Moore', 'Cohen'],
+          ['Banks']
+        ]
+      },
+      1970: {
+        tecnico: 'Mário Zagallo',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-2-4',
+        linhas: [
+          ['Rivellino', 'Tostão', 'Pelé', 'Jairzinho'],
+          ['Gérson', 'Clodoaldo'],
+          ['Everaldo', 'Piazza', 'Brito', 'Carlos Alberto'],
+          ['Félix']
+        ]
+      },
+      1974: {
+        tecnico: 'Helmut Schön',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Holzenbein', 'Müller', 'Grabowski'],
+          ['Bonhof', 'Overath', 'Hoeneß'],
+          ['Breitner', 'Beckenbauer', 'Schwarzenbeck', 'Vogts'],
+          ['Maier']
+        ]
+      },
+      1978: {
+        tecnico: 'César Luis Menotti',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Ortiz', 'Luque', 'Bertoni'],
+          ['Ardiles', 'Gallego', 'Kempes'],
+          ['Tarantini', 'Passarella', 'Galván', 'Olguín'],
+          ['Fillol']
+        ]
+      },
+      1982: {
+        tecnico: 'Enzo Bearzot',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Conti', 'Rossi', 'Graziani'],
+          ['Tardelli', 'Oriali', 'Antognoni'],
+          ['Cabrini', 'Scirea', 'Collovati', 'Gentile'],
+          ['Zoff']
+        ]
+      },
+      1986: {
+        tecnico: 'Carlos Bilardo',
+        observacao: 'Escalação campeã da final',
+        formacao: '3-4-3',
+        linhas: [
+          ['Valdano', 'Maradona', 'Burruchaga'],
+          ['Olarticoechea', 'Batista', 'Giusti', 'Enrique'],
+          ['Ruggeri', 'Brown', 'Cucciuffo'],
+          ['Pumpido']
+        ]
+      },
+      1990: {
+        tecnico: 'Franz Beckenbauer',
+        observacao: 'Escalação campeã da final',
+        formacao: '5-3-2',
+        linhas: [
+          ['Völler', 'Klinsmann'],
+          ['Littbarski', 'Matthäus', 'Hässler'],
+          ['Brehme', 'Buchwald', 'Augenthaler', 'Kohler', 'Berthold'],
+          ['Illgner']
+        ]
+      },
+      1994: {
+        tecnico: 'Carlos Alberto Parreira',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Zinho', 'Romário', 'Bebeto'],
+          ['Mazinho', 'Dunga', 'Mauro Silva'],
+          ['Branco', 'Márcio Santos', 'Aldair', 'Jorginho'],
+          ['Taffarel']
+        ]
+      },
+      1998: {
+        tecnico: 'Aimé Jacquet',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Djorkaeff', 'Guivarc’h', 'Zidane'],
+          ['Karembeu', 'Deschamps', 'Petit'],
+          ['Lizarazu', 'Leboeuf', 'Desailly', 'Thuram'],
+          ['Barthez']
+        ]
+      },
+      2002: {
+        tecnico: 'Luiz Felipe Scolari',
+        observacao: 'Escalação campeã da final',
+        formacao: '3-4-2-1',
+        linhas: [
+          ['Ronaldo'],
+          ['Rivaldo', 'Ronaldinho'],
+          ['Roberto Carlos', 'Gilberto Silva', 'Kléberson', 'Cafu'],
+          ['Edmílson', 'Roque Júnior', 'Lúcio'],
+          ['Marcos']
+        ]
+      },
+      2006: {
+        tecnico: 'Marcello Lippi',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-4-1-1',
+        linhas: [
+          ['Toni'],
+          ['Totti'],
+          ['Camoranesi', 'Perrotta', 'Pirlo', 'Gattuso'],
+          ['Grosso', 'Materazzi', 'Cannavaro', 'Zambrotta'],
+          ['Buffon']
+        ]
+      },
+      2010: {
+        tecnico: 'Vicente del Bosque',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Iniesta', 'David Villa', 'Pedro'],
+          ['Xavi', 'Busquets', 'Xabi Alonso'],
+          ['Capdevila', 'Piqué', 'Puyol', 'Sergio Ramos'],
+          ['Casillas']
+        ]
+      },
+      2014: {
+        tecnico: 'Joachim Löw',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Özil', 'Klose', 'Müller'],
+          ['Kroos', 'Kramer', 'Schweinsteiger'],
+          ['Höwedes', 'Hummels', 'Boateng', 'Lahm'],
+          ['Neuer']
+        ]
+      },
+      2018: {
+        tecnico: 'Didier Deschamps',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Matuidi', 'Giroud', 'Mbappé'],
+          ['Pogba', 'Kanté', 'Griezmann'],
+          ['Hernandez', 'Umtiti', 'Varane', 'Pavard'],
+          ['Lloris']
+        ]
+      },
+      2022: {
+        tecnico: 'Lionel Scaloni',
+        observacao: 'Escalação campeã da final',
+        formacao: '4-3-3',
+        linhas: [
+          ['Di María', 'Julián Álvarez', 'Messi'],
+          ['Mac Allister', 'Enzo Fernández', 'De Paul'],
+          ['Tagliafico', 'Otamendi', 'Romero', 'Molina'],
+          ['E. Martínez']
+        ]
+      }
+    };
+
+    function limparClasseEscalacaoModal() {
+      modalBox.classList.remove('modal-escalacao');
+    }
+
+    function nomeBuscaWikipedia(jogador, ano) {
+      return nomesBuscaFoto[`${ano}|${jogador}`] || jogador;
+    }
+
+    async function buscarFotoJogador(query) {
+      if (cacheFotosJogadores[query] !== undefined) {
+        return cacheFotosJogadores[query];
+      }
+
+      try {
+        const buscaUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query + ' association football')}&utf8=1&format=json&origin=*`;
+        const buscaResp = await fetch(buscaUrl);
+        const buscaData = await buscaResp.json();
+        const resultado = buscaData?.query?.search?.[0];
+        if (!resultado?.title) {
+          cacheFotosJogadores[query] = null;
+          return null;
+        }
+
+        const titulo = resultado.title;
+        const fotoUrl = `https://en.wikipedia.org/w/api.php?action=query&prop=pageimages&titles=${encodeURIComponent(titulo)}&pithumbsize=160&format=json&origin=*`;
+        const fotoResp = await fetch(fotoUrl);
+        const fotoData = await fotoResp.json();
+        const pages = fotoData?.query?.pages || {};
+        const page = Object.values(pages)[0];
+        const src = page?.thumbnail?.source || null;
+        cacheFotosJogadores[query] = src;
+        return src;
+      } catch (error) {
+        cacheFotosJogadores[query] = null;
+        return null;
+      }
+    }
+
+    async function carregarFotosJogadores() {
+      const avatares = Array.from(modalBox.querySelectorAll('.jogador-avatar[data-busca]'));
+      for (const avatar of avatares) {
+        const busca = avatar.dataset.busca;
+        const img = avatar.querySelector('.jogador-foto');
+        if (!img) continue;
+        const foto = await buscarFotoJogador(busca);
+        if (foto) {
+          img.src = foto;
+          img.alt = avatar.dataset.jogador || 'Jogador';
+          avatar.classList.add('tem-foto');
+        }
+      }
+    }
+
+    function bandeiraCampeao(campeao) {
+      const codigos = {
+        'Uruguai': 'uy',
+        'Itália': 'it',
+        'Alemanha Ocidental': 'de',
+        'Brasil': 'br',
+        'Inglaterra': 'gb-eng',
+        'Argentina': 'ar',
+        'França': 'fr',
+        'Espanha': 'es',
+        'Alemanha': 'de'
+      };
+
+      const codigo = codigos[campeao];
+      if (!codigo) return '';
+
+      return `<img class="bandeira-img" src="https://flagcdn.com/w20/${codigo}.png" alt="Bandeira ${campeao}" title="${campeao}" loading="lazy" onerror="this.style.display='none'">`;
+    }
+
+    function nomeRanking(campeao) {
+      if (campeao === 'Alemanha Ocidental') return 'Alemanha';
+      return campeao;
+    }
+
+    function iniciaisJogador(nome) {
+      return nome
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(parte => parte[0])
+        .join('')
+        .toUpperCase();
+    }
+
+    function abrirModalPorAno(ano) {
+      const index = copas.findIndex(copa => copa.ano === Number(ano));
+      if (index >= 0) abrirModal(index);
+    }
+
+    function renderizarRankingCampeoes() {
+      const titulos = {};
+
+      copas.forEach(copa => {
+        if (!copa.campeao || copa.campeao === 'A definir') return;
+        const nome = nomeRanking(copa.campeao);
+        titulos[nome] = (titulos[nome] || 0) + 1;
+      });
+
+      const ranking = Object.entries(titulos)
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'pt-BR'));
+
+      rankingCampeoes.innerHTML = ranking.map(([pais, total], index) => `
+        <div class="item-ranking" onclick="abrirModalCampeao('${pais.replace(/'/g, "\\'")}')" title="Ver títulos de ${pais}">
+          <div class="posicao-ranking">${index + 1}º</div>
+          <div>
+            <div class="pais-ranking">${pais} ${bandeiraCampeao(pais)}</div>
+            <div class="tacas-ranking">${'🏆'.repeat(total)}</div>
+          </div>
+          <div class="numero-ranking">${total}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderizarGaleria() {
+      copas.forEach((copa, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => abrirModal(index);
+
+        card.innerHTML = `
+          <div class="capa">
+            <img class="icone-copa" src="${copa.icone}" alt="Copa ${copa.ano}" onerror="this.style.display='none'">
+            <div class="ano-copa">${copa.ano}</div>
+          </div>
+          <div class="info">
+            <h2>Copa ${copa.ano}</h2>
+            <div class="campeao-info">
+              <strong>Campeão:</strong>
+              <span>${copa.campeao}</span>
+              ${bandeiraCampeao(copa.campeao)}
+            </div>
+          </div>
+        `;
+
+        galeria.appendChild(card);
+      });
+    }
+
+    function copasDoCampeao(paisRanking) {
+      return copas
+        .filter(copa => copa.campeao && copa.campeao !== 'A definir' && nomeRanking(copa.campeao) === paisRanking)
+        .sort((a, b) => a.ano - b.ano);
+    }
+
+    function fecharModal() {
+      contextoRetorno = null;
+      limparClasseEscalacaoModal();
+      modalOverlay.classList.remove('ativo');
+    }
+
+    function voltarModal() {
+      if (typeof contextoRetorno === 'function') {
+        const callback = contextoRetorno;
+        contextoRetorno = null;
+        callback();
+      } else {
+        fecharModal();
+      }
+    }
+
+    function abrirEscalacaoPorAno(ano, origem, chave) {
+      const copa = copas.find(item => item.ano === Number(ano));
+      const escalacao = escalacoesPorAno[ano];
+      if (!copa || !escalacao) return;
+
+      if (origem === 'campeao') {
+        contextoRetorno = () => abrirModalCampeao(chave);
+      } else {
+        contextoRetorno = () => abrirModalPorAno(chave);
+      }
+
+      const linhasCampo = escalacao.linhas.map(linha => `
+        <div class="linha-escalacao">
+          ${linha.map(jogador => `
+            <div class="jogador-card">
+              <div class="jogador-avatar" data-jogador="${jogador}" data-busca="${nomeBuscaWikipedia(jogador, ano)}">
+                <img class="jogador-foto" alt="${jogador}">
+                <span class="jogador-iniciais">${iniciaisJogador(jogador)}</span>
+              </div>
+              <div class="jogador-nome">${jogador}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+
+      const listaLinear = escalacao.linhas.flat().join(', ');
+
+      limparClasseEscalacaoModal();
+      modalBox.classList.add('modal-escalacao');
+      modalBox.innerHTML = `
+        <button class="botao-voltar" onclick="voltarModal()">← Voltar</button>
+        <button class="fechar" onclick="fecharModal()">×</button>
+
+        <div class="topo-modal" style="margin-top: 34px;">
+          <div style="font-size: 76px; line-height: 1;">⚽</div>
+          <div>
+            <h2>Escalação campeã - ${copa.campeao} ${bandeiraCampeao(nomeRanking(copa.campeao))}</h2>
+            <p>Copa do Mundo ${copa.ano} • Sede: ${copa.pais}</p>
+          </div>
+        </div>
+
+        <p class="lineup-intro">Visual em estilo de campo, semelhante à referência enviada, mostrando a equipe campeã de ${copa.ano}. A formação abaixo representa a base titular da final.</p>
+
+        <div class="resumo-selecao">
+          <div class="resumo-card"><strong>${escalacao.formacao}</strong><span>Formação</span></div>
+          <div class="resumo-card"><strong>${escalacao.tecnico}</strong><span>Técnico</span></div>
+          <div class="resumo-card"><strong>${copa.final}</strong><span>Resultado da final</span></div>
+        </div>
+
+        <div class="campo-escalacao">
+          <div class="grande-area topo"></div>
+          <div class="grande-area baixo"></div>
+          <div class="circulo-central"></div>
+          <div class="linhas-escalacao">${linhasCampo}</div>
+        </div>
+
+        <div class="lista-jogadores">
+          <h3>${escalacao.observacao}</h3>
+          <p><strong>Jogadores:</strong> ${listaLinear}</p>
+        </div>
+      `;
+
+      modalOverlay.classList.add('ativo');
+      carregarFotosJogadores();
+    }
+
+    function abrirModalCampeao(paisRanking) {
+      contextoRetorno = null;
+      limparClasseEscalacaoModal();
+      const titulos = copasDoCampeao(paisRanking);
+      const primeiroTitulo = titulos[0]?.ano || '-';
+      const ultimoTitulo = titulos[titulos.length - 1]?.ano || '-';
+      const paisEscapado = paisRanking.replace(/'/g, "\\'");
+
+      modalBox.innerHTML = `
+        <button class="fechar" onclick="fecharModal()">×</button>
+
+        <div class="topo-modal">
+          <div style="font-size: 76px; line-height: 1;">🏆</div>
+          <div>
+            <h2>${paisRanking} ${bandeiraCampeao(paisRanking)}</h2>
+            <p>Histórico de títulos em Copas do Mundo FIFA</p>
+          </div>
+        </div>
+
+        <div class="resumo-selecao">
+          <div class="resumo-card"><strong>${titulos.length}</strong><span>Total de títulos</span></div>
+          <div class="resumo-card"><strong>${primeiroTitulo}</strong><span>Primeiro título</span></div>
+          <div class="resumo-card"><strong>${ultimoTitulo}</strong><span>Último título</span></div>
+        </div>
+
+        <h3 style="color:#063970; margin-bottom:10px;">Anos campeões</h3>
+        <div class="anos-titulos">
+          ${titulos.map(copa => `<span class="ano-titulo-pill">${copa.ano}</span>`).join('')}
+        </div>
+
+        <h3 style="color:#063970; margin-bottom:12px;">Informações detalhadas por ano</h3>
+        <div class="detalhes-titulos">
+          ${titulos.map(copa => `
+            <div class="detalhe-titulo">
+              <h3>${copa.ano}</h3>
+              <p><strong>Sede:</strong> ${copa.pais}</p>
+              <p><strong>Campeão:</strong> ${copa.campeao} ${bandeiraCampeao(copa.campeao)}</p>
+              <p><strong>Vice:</strong> ${copa.vice}</p>
+              <p><strong>Final:</strong> ${copa.final}</p>
+              <p><strong>Artilheiro:</strong> ${copa.artilheiro}</p>
+              ${escalacoesPorAno[copa.ano] ? `<div class="detalhe-acoes"><button class="btn-mini-escalacao" onclick="abrirEscalacaoPorAno(${copa.ano}, 'campeao', '${paisEscapado}')">Ver escalação</button></div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      modalOverlay.classList.add('ativo');
+    }
+
+    function abrirModal(index) {
+      contextoRetorno = null;
+      limparClasseEscalacaoModal();
+      const copa = copas[index];
+      const possuiEscalacao = Boolean(escalacoesPorAno[copa.ano]);
+
+      modalBox.innerHTML = `
+        <button class="fechar" onclick="fecharModal()">×</button>
+
+        <div class="topo-modal">
+          <img src="${copa.icone}" alt="Copa ${copa.ano}" onerror="this.style.display='none'">
+          <div>
+            <h2>Copa do Mundo ${copa.ano}</h2>
+            <p>Sede: ${copa.pais}</p>
+          </div>
+        </div>
+
+        <div class="dados">
+          <div class="dado"><strong>Campeão</strong><span>${copa.campeao}</span></div>
+          <div class="dado"><strong>Vice-campeão</strong><span>${copa.vice}</span></div>
+          <div class="dado"><strong>Final</strong><span>${copa.final}</span></div>
+          <div class="dado"><strong>Artilheiro</strong><span>${copa.artilheiro}</span></div>
+        </div>
+
+        <div class="acoes">
+          ${copa.drive && !copa.drive.startsWith('COLE_AQUI') ? `<a class="btn-drive" href="${copa.drive}" target="_blank">Link Drive PDF - Figurinhas Panini</a>` : `<span class="msg-sem-album">Sem álbum vinculado</span>`}
+          ${possuiEscalacao ? `<button class="btn-drive btn-escalacao" onclick="abrirEscalacaoPorAno(${copa.ano}, 'copa', ${copa.ano})">Escalação campeã</button>` : ''}
+        </div>
+      `;
+
+      modalOverlay.classList.add('ativo');
+    }
+
+    renderizarRankingCampeoes();
+    renderizarGaleria();
+
+    modalOverlay.addEventListener('click', function(event) {
+      if (event.target === modalOverlay) {
+        fecharModal();
+      }
+    });
+  </script>
+</body>
+</html>
